@@ -172,6 +172,13 @@ def _save_persistent_history(session_id: str, history: ChatMessageHistory):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(messages_to_dict(history.messages), f, ensure_ascii=False, indent=2)
 
+def _list_saved_sessions():
+    session_names = []
+    for name in os.listdir(CHAT_MEMORY_DIR):
+        if name.endswith(".json"):
+            session_names.append(name[:-5])
+    return sorted(session_names)
+
 def get_history(session_id: str):
     if session_id not in st.session_state.chathistory:
         st.session_state.chathistory[session_id] = _load_persistent_history(session_id)
@@ -184,9 +191,18 @@ user_q = st.chat_input("💬 Ask a question...")
 
 # ── Session state for chat history here
 
+session_id = st.sidebar.text_input("Session ID", value=session_id)
 history = get_history(session_id)
 
-if st.button("Clear This Session Memory"):
+st.sidebar.subheader("Saved Sessions")
+saved_sessions = _list_saved_sessions()
+if saved_sessions:
+    for s in saved_sessions:
+        st.sidebar.write(f"- {s}")
+else:
+    st.sidebar.caption("No saved sessions yet.")
+
+if st.sidebar.button("Clear This Session Memory"):
     history.clear()
     _save_persistent_history(session_id, history)
     st.rerun()
