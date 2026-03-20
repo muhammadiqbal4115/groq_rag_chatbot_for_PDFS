@@ -12,3 +12,4 @@ transformers
 tokenizers
 torch
 accelerate
+langchain_huggingface
