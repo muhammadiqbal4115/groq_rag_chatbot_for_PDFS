@@ -13,3 +13,4 @@ tokenizers
 torch
 accelerate
 langchain_huggingface
+torchvision
