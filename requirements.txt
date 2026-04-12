@@ -1,6 +1,6 @@
 streamlit
 python-dotenv
-
+langchain_groq
 
 langchain-text-splitters
 
